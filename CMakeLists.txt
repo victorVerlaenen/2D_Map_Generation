@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+   
+project(GameEngine)
+add_subdirectory(Libraries/Engine)
+add_subdirectory(Libraries/Test)
+include(./cmake/dae/dae_utils.cmake)
+DefineLibraries()
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/projects.cmake") 
+	message("Creating project")
+	include("${CMAKE_CURRENT_SOURCE_DIR}/projects.cmake")
+endif()
+include(InstallRequiredSystemLibraries)

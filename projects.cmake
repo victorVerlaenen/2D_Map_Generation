@@ -1,0 +1,1 @@
+DefineGameProject("MapGenerator2D")
