@@ -34,6 +34,7 @@ void Map::Draw() const
 	// If there is a generated map
 	if (m_Map.empty() == false)
 	{
+		// bottom left point of the first cell
 		Point2f drawingPoint{ m_DrawingStartPoint };
 		for (int row{ 0 }; row < m_Rows; ++row)
 		{
@@ -44,9 +45,12 @@ void Map::Draw() const
 
 				// Determine the size op the map so it fits the window
 				utils::FillRect(drawingPoint, m_CellSize, m_CellSize);
+				// Move 1 cell to the right
 				drawingPoint.x += m_CellSize;
 			}
+			// Move 1 cell down
 			drawingPoint.y -= m_CellSize;
+			// Jump back left to first column cell
 			drawingPoint.x = m_DrawingStartPoint.x;
 		}
 	}
