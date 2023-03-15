@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-class Map
+class Map final
 {
 public:
 	Map(const unsigned int rows, const unsigned int cols);

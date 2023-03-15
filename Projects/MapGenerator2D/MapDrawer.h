@@ -1,7 +1,7 @@
 #pragma once
 
 class Map;
-class MapDrawer
+class MapDrawer final
 {
 public:
 	enum class DrawMethod

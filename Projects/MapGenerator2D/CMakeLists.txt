@@ -3,7 +3,7 @@ MapGenerator2D
 main.cpp
 MapGenerator2D.h
 MapGenerator2D.cpp
- "Map.h" "Map.cpp" "MapDrawer.h" "MapDrawer.cpp")
+ "Map.h" "Map.cpp" "MapDrawer.h" "MapDrawer.cpp" "Node.h" "Node.cpp" "ControlNode.h" "ControlNode.cpp" "Tile.h" "Tile.cpp")
 
 set_target_properties(MapGenerator2D PROPERTIES FOLDER Games)
 
