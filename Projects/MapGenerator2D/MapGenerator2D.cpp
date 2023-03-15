@@ -1,31 +1,38 @@
 #include "pch.h"
 #include "MapGenerator2D.h"
+#include "Map.h"
+#include "MapDrawer.h"
 
 #include "utils.h"
 
-MapGenerator2D::MapGenerator2D( const Window& window ) 
+MapGenerator2D::MapGenerator2D(const Window& window)
 	:BaseGame{ window }
-	, m_Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height }
+	, m_pMap{ new Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width)} }
+	, m_pMapDrawer{ new MapDrawer{m_pMap, window.width, window.height} }
 {
 	Initialize();
 }
 
-MapGenerator2D::~MapGenerator2D( )
+MapGenerator2D::~MapGenerator2D()
 {
-	Cleanup( );
+	Cleanup();
 }
 
-void MapGenerator2D::Initialize( )
-{
-	
-}
-
-void MapGenerator2D::Cleanup( )
+void MapGenerator2D::Initialize()
 {
 
 }
 
-void MapGenerator2D::Update( float elapsedSec )
+void MapGenerator2D::Cleanup()
+{
+	delete m_pMap;
+	m_pMap = nullptr;
+
+	delete m_pMapDrawer;
+	m_pMapDrawer = nullptr;
+}
+
+void MapGenerator2D::Update(float elapsedSec)
 {
 	// Check keyboard state
 	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
@@ -39,18 +46,18 @@ void MapGenerator2D::Update( float elapsedSec )
 	//}
 }
 
-void MapGenerator2D::Draw( ) const
+void MapGenerator2D::Draw() const
 {
-	ClearBackground( );
-	m_Map.Draw();
+	ClearBackground();
+	m_pMapDrawer->Draw();
 }
 
-void MapGenerator2D::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
+void MapGenerator2D::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 {
 	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
 }
 
-void MapGenerator2D::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
+void MapGenerator2D::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
 	//switch ( e.keysym.sym )
@@ -68,12 +75,12 @@ void MapGenerator2D::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 	//}
 }
 
-void MapGenerator2D::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
+void MapGenerator2D::ProcessMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
 	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
 }
 
-void MapGenerator2D::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
+void MapGenerator2D::ProcessMouseDownEvent(const SDL_MouseButtonEvent& e)
 {
 	//std::cout << "MOUSEBUTTONDOWN event: ";
 	//switch ( e.button )
@@ -90,15 +97,15 @@ void MapGenerator2D::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	//}
 	if (e.button == SDL_BUTTON_LEFT)
 	{
-		m_Map.IterateCellularAutomata();
+		m_pMap->IterateCellularAutomata();
 	}
 	if (e.button == SDL_BUTTON_RIGHT)
 	{
-		m_Map.GenerateMap();
+		m_pMap->GenerateMap();
 	}
 }
 
-void MapGenerator2D::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
+void MapGenerator2D::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
 	//std::cout << "MOUSEBUTTONUP event: ";
 	//switch ( e.button )
@@ -115,8 +122,8 @@ void MapGenerator2D::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 	//}
 }
 
-void MapGenerator2D::ClearBackground( ) const
+void MapGenerator2D::ClearBackground() const
 {
-	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
-	glClear( GL_COLOR_BUFFER_BIT );
+	glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 }

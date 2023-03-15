@@ -1,7 +1,8 @@
 #pragma once
 #include "BaseGame.h"
-#include "Map.h"
 
+class Map;
+class MapDrawer;
 class MapGenerator2D : public BaseGame
 {
 public:
@@ -29,5 +30,6 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
-	Map m_Map;
+	Map* m_pMap;
+	MapDrawer* m_pMapDrawer;
 };
