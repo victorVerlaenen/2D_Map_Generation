@@ -5,7 +5,7 @@
 
 MapGenerator2D::MapGenerator2D( const Window& window ) 
 	:BaseGame{ window }
-	, m_Map{20, 20}
+	, m_Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height }
 {
 	Initialize();
 }
@@ -42,6 +42,7 @@ void MapGenerator2D::Update( float elapsedSec )
 void MapGenerator2D::Draw( ) const
 {
 	ClearBackground( );
+	m_Map.Draw();
 }
 
 void MapGenerator2D::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -87,7 +88,14 @@ void MapGenerator2D::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
-	
+	if (e.button == SDL_BUTTON_LEFT)
+	{
+		m_Map.IterateCellularAutomata();
+	}
+	if (e.button == SDL_BUTTON_RIGHT)
+	{
+		m_Map.GenerateMap();
+	}
 }
 
 void MapGenerator2D::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
