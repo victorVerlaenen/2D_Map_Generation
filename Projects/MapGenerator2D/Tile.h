@@ -1,26 +1,24 @@
 #pragma once
-#include <memory>
 
 class ControlNode;
 class Node;
 class Tile
 {
 public:
-	Tile(std::shared_ptr<ControlNode> pBottomLeftNode, std::shared_ptr<ControlNode> pBottomRightNode, std::shared_ptr<ControlNode> pTopLeftNode, std::shared_ptr<ControlNode> pTopRightNode);
+	Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlNode* pTopLeftNode, ControlNode* pTopRightNode);
 	~Tile();
 
 	void DrawNodes(float controlNodeRadius, float otherNodeRadius) const;
 	void Draw() const;
 
 private:
-	
-	std::shared_ptr<ControlNode> m_pBottomLeftNode;
-	std::shared_ptr<ControlNode> m_pBottomRightNode;
-	std::shared_ptr<ControlNode> m_pTopLeftNode;
-	std::shared_ptr<ControlNode> m_pTopRightNode;
+	ControlNode* m_pBottomLeftNode;
+	ControlNode* m_pBottomRightNode;
+	ControlNode* m_pTopLeftNode;
+	ControlNode* m_pTopRightNode;
 
-	std::shared_ptr<Node> m_pCentreLeftNode;
-	std::shared_ptr<Node> m_pCentreRightNode;
-	std::shared_ptr<Node> m_pCentreTopNode;
-	std::shared_ptr<Node> m_pCentreBottomNode;
+	Node* m_pCentreLeftNode;
+	Node* m_pCentreRightNode;
+	Node* m_pCentreTopNode;
+	Node* m_pCentreBottomNode;
 };

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "utils.h"
 
-Tile::Tile(std::shared_ptr<ControlNode> pBottomLeftNode, std::shared_ptr<ControlNode> pBottomRightNode, std::shared_ptr<ControlNode> pTopLeftNode, std::shared_ptr<ControlNode> pTopRightNode)
+Tile::Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlNode* pTopLeftNode, ControlNode* pTopRightNode)
 	:m_pBottomLeftNode{ pBottomLeftNode }
 	, m_pBottomRightNode{ pBottomRightNode }
 	, m_pTopLeftNode{ pTopLeftNode }
@@ -20,7 +20,7 @@ Tile::Tile(std::shared_ptr<ControlNode> pBottomLeftNode, std::shared_ptr<Control
 
 Tile::~Tile()
 {
-	/*std::cout << "delete m_pBottomLeftNode: ";
+	std::cout << "delete m_pBottomLeftNode: ";
 	if (m_pBottomLeftNode != nullptr)
 		delete m_pBottomLeftNode;
 	m_pBottomLeftNode = nullptr;
@@ -38,7 +38,7 @@ Tile::~Tile()
 	std::cout << "delete m_pTopRightNode: ";
 	if (m_pTopRightNode != nullptr)
 		delete m_pTopRightNode;
-	m_pTopRightNode = nullptr;*/
+	m_pTopRightNode = nullptr;
 }
 
 void Tile::DrawNodes(float controlNodeRadius, float otherNodeRadius) const
