@@ -116,7 +116,7 @@ void Map::GenerateNoiseMap()
 
 void Map::GenerateTiles()
 {
-	std::vector<std::vector<ControlNode*>> pControlNodes{ m_Rows, std::vector<ControlNode*>(m_Columns, nullptr) };
+	std::vector<std::vector<std::shared_ptr<ControlNode>>> pControlNodes{ m_Rows, std::vector<std::shared_ptr<ControlNode>>(m_Columns, std::shared_ptr<ControlNode>{nullptr}) };
 
 	Point2f position{ 0,0 };
 	for (int row{ 0 }; row < m_Rows; ++row)
@@ -125,7 +125,7 @@ void Map::GenerateTiles()
 		{
 			// Position is the middle of the cells
 			position = Point2f{ (m_FirstNodePosition.x + (m_CellSize / 2.f)) + (col * m_CellSize), (m_FirstNodePosition.y - m_CellSize / 2.f) - (row * m_CellSize) };
-			pControlNodes[row][col] = new ControlNode{ position, m_Data[row][col] == true, m_CellSize };
+			pControlNodes[row][col] = std::make_shared<ControlNode>(position, m_Data[row][col] == true, m_CellSize );
 		}
 	}
 
