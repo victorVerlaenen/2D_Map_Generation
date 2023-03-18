@@ -7,7 +7,7 @@
 
 MapGenerator2D::MapGenerator2D(const Window& window)
 	:BaseGame{ window }
-	, m_pMap{ new Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width)} }
+	, m_pMap{ new Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height} }
 	, m_pMapDrawer{ new MapDrawer{m_pMap, window.width, window.height} }
 {
 	Initialize();
@@ -95,6 +95,7 @@ void MapGenerator2D::ProcessMouseDownEvent(const SDL_MouseButtonEvent& e)
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
+
 	if (e.button == SDL_BUTTON_LEFT)
 	{
 		m_pMap->IterateCellularAutomata();

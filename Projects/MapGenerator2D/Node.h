@@ -5,7 +5,7 @@ class Node
 {
 public:
 	Node(const Point2f& position);
-	virtual ~Node() = default;
+	virtual ~Node();
 
 	virtual void Draw(float radius) const;
 

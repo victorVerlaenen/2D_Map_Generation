@@ -10,7 +10,7 @@ public:
 	Node* GetAboveNode() const;
 	Node* GetRightNode() const;
 
-	static Color4f s_Color;
+	bool GetIsActive() const;
 private:
 	bool m_IsActive;
 	Node* m_pAboveNode, *m_pRightNode;

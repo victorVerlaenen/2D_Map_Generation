@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "MapDrawer.h"
 #include "Map.h"
+#include "Tile.h"
 #include "utils.h"
 
 MapDrawer::MapDrawer(Map* pMap, const float windowWidth, const float windowHeight)
-	:m_DrawMethod{ DrawMethod::pixelMap }
+	:m_DrawMethod{ DrawMethod::nodesMap }
 	, m_pMap{ pMap }
 	, m_CellSize{ windowWidth >= windowHeight ? windowHeight / pMap->GetRows() : windowWidth / pMap->GetColumns()}
 	, m_WallColor{ 0, 0, 0, 1 }
@@ -31,6 +32,7 @@ void MapDrawer::Draw() const
 		DrawPixelMap();
 		break;
 	case DrawMethod::nodesMap:
+		DrawNodesMap();
 		break;
 	case DrawMethod::smoothMap:
 		break;
@@ -80,7 +82,26 @@ void MapDrawer::DrawPixelMap() const
 
 void MapDrawer::DrawNodesMap() const
 {
+	if (m_pMap == nullptr)
+	{
+		return;
+	}
+	// If there is a generated map
+	if (m_pMap->GetData().empty() == true)
+	{
+		return;
+	}
 
+	float controlNodeRadius{ 3 }, nodeRadius{ 2 };
+
+	auto pTiles = m_pMap->GetTiles();
+	for (auto row : pTiles)
+	{
+		for (Tile* pTile : row)
+		{
+			pTile->DrawNodes(controlNodeRadius, nodeRadius);
+		}
+	}
 }
 
 void MapDrawer::DrawSmoothMap() const

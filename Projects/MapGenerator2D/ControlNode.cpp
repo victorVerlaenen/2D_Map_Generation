@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "ControlNode.h"
-
-Color4f ControlNode::s_Color{ Color4f{1, 0, 0, 1} };
+#include <iostream>
 
 ControlNode::ControlNode(const Point2f& position, bool isActive, float cellSize)
 	:Node{ position }
@@ -14,9 +13,11 @@ ControlNode::ControlNode(const Point2f& position, bool isActive, float cellSize)
 
 ControlNode::~ControlNode()
 {
+	std::cout << "delete m_pAboveNode\n";
 	delete m_pAboveNode;
 	m_pAboveNode = nullptr;
 
+	std::cout << "delete m_pRightNode\n";
 	delete m_pRightNode;
 	m_pRightNode = nullptr;
 }
@@ -29,4 +30,9 @@ Node* ControlNode::GetAboveNode() const
 Node* ControlNode::GetRightNode() const
 {
 	return m_pRightNode;
+}
+
+bool ControlNode::GetIsActive() const
+{
+	return m_IsActive;
 }

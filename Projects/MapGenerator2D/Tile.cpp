@@ -2,6 +2,7 @@
 #include "Tile.h"
 #include "Node.h"
 #include "ControlNode.h"
+#include <iostream>
 #include "utils.h"
 
 Tile::Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlNode* pTopLeftNode, ControlNode* pTopRightNode)
@@ -14,35 +15,42 @@ Tile::Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlN
 	, m_pCentreTopNode{ pTopLeftNode->GetRightNode() }
 	, m_pCentreBottomNode{ pBottomLeftNode->GetRightNode() }
 {
+
 }
 
 Tile::~Tile()
 {
-	delete m_pBottomLeftNode;
+	std::cout << "delete m_pBottomLeftNode: ";
+	if (m_pBottomLeftNode != nullptr)
+		delete m_pBottomLeftNode;
 	m_pBottomLeftNode = nullptr;
 
-	delete m_pBottomRightNode;
+	std::cout << "delete m_pBottomRightNode: ";
+	if (m_pBottomRightNode != nullptr)
+		delete m_pBottomRightNode;
 	m_pBottomRightNode = nullptr;
 
-	delete m_pTopLeftNode;
+	std::cout << "delete m_pTopLeftNode: ";
+	if (m_pTopLeftNode != nullptr)
+		delete m_pTopLeftNode;
 	m_pTopLeftNode = nullptr;
 
-	delete m_pTopRightNode;
+	std::cout << "delete m_pTopRightNode: ";
+	if (m_pTopRightNode != nullptr)
+		delete m_pTopRightNode;
 	m_pTopRightNode = nullptr;
-
-	delete m_pCentreLeftNode;
-	delete m_pCentreRightNode;
-	delete m_pCentreTopNode;
-	delete m_pCentreBottomNode;
 }
 
 void Tile::DrawNodes(float controlNodeRadius, float otherNodeRadius) const
 {
 	// Draw the control nodes
-	utils::SetColor(ControlNode::s_Color);
+	utils::SetColor(m_pBottomLeftNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
 	m_pBottomLeftNode->Draw(controlNodeRadius);
+	utils::SetColor(m_pBottomRightNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
 	m_pBottomRightNode->Draw(controlNodeRadius);
+	utils::SetColor(m_pTopLeftNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
 	m_pTopLeftNode->Draw(controlNodeRadius);
+	utils::SetColor(m_pTopRightNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
 	m_pTopRightNode->Draw(controlNodeRadius);
 
 	// Draw the other nodes
@@ -55,4 +63,5 @@ void Tile::DrawNodes(float controlNodeRadius, float otherNodeRadius) const
 
 void Tile::Draw() const
 {
+
 }

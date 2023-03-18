@@ -3,15 +3,37 @@
 #include "utils.h"
 #include <iostream>
 #include <chrono>
+#include "Tile.h"
 #include <random>
+#include "ControlNode.h"
 
-Map::Map(const unsigned int rows, const unsigned int cols)
+Map::Map(const unsigned int rows, const unsigned int cols, const float windowWidth, const float windowHeight)
 	:m_Data{ rows, std::vector<bool>(cols, true) }
+	, m_pTiles{ rows - 1, std::vector<Tile*>(cols - 1, nullptr) }// Because the nodes are in the middle of the cell, there will be 1 less tile
+	, m_CellSize{ windowWidth >= windowHeight ? windowHeight / rows : windowWidth / cols }
 	, m_NoiseDensityPercentage{ 48 }
 	, m_Rows{ rows }
 	, m_Columns{ cols }
 {
+	float mapWidth = m_CellSize * m_Columns;
+	float mapHeight = m_CellSize * m_Rows;
+
+	m_FirstNodePosition = Point2f{ (windowWidth / 2.f) - (mapWidth / 2.f), ((windowHeight / 2.f) + (mapHeight / 2.f)) };
+
 	Initialize();
+}
+
+Map::~Map()
+{
+	for (int row{}; row < m_Rows - 1; ++row)
+	{
+		for (int col{}; col < m_Columns - 1; ++col)
+		{
+			std::cout << "Delete m_pTiles[" << row << "][" << col << "]\n";
+			delete m_pTiles[row][col];
+			m_pTiles[row][col] = nullptr;
+		}
+	}
 }
 
 void Map::Initialize()
@@ -23,6 +45,7 @@ void Map::GenerateMap()
 {
 	m_Data.assign(m_Rows, std::vector<bool>(m_Columns, true));
 	GenerateNoiseMap();
+	GenerateTiles();
 
 	for (int i{ 0 }; i < m_CellularAutomataIterations; ++i)
 	{
@@ -43,6 +66,11 @@ unsigned int Map::GetRows() const
 unsigned int Map::GetColumns() const
 {
 	return m_Columns;
+}
+
+std::vector<std::vector<Tile*>> Map::GetTiles() const
+{
+	return m_pTiles;
 }
 
 void Map::PrintMap() const
@@ -86,6 +114,32 @@ void Map::GenerateNoiseMap()
 	}
 }
 
+void Map::GenerateTiles()
+{
+	std::vector<std::vector<ControlNode*>> pControlNodes{ m_Rows, std::vector<ControlNode*>(m_Columns, nullptr) };
+
+	Point2f position{ 0,0 };
+	for (int row{ 0 }; row < m_Rows; ++row)
+	{
+		for (int col{ 0 }; col < m_Columns; ++col)
+		{
+			// Position is the middle of the cells
+			position = Point2f{ (m_FirstNodePosition.x + (m_CellSize / 2.f)) + (col * m_CellSize), (m_FirstNodePosition.y - m_CellSize / 2.f) - (row * m_CellSize) };
+			pControlNodes[row][col] = new ControlNode{ position, m_Data[row][col] == true, m_CellSize };
+		}
+	}
+
+	// Because the nodes are in the middle of the cell, there will be 1 less tile
+	for (int row{ 0 }; row < m_Rows - 1; ++row)
+	{
+		for (int col{ 0 }; col < m_Columns - 1; ++col)
+		{
+			m_pTiles[row][col] = new Tile{ pControlNodes[row + 1][col], pControlNodes[row + 1][col + 1], pControlNodes[row][col], pControlNodes[row][col + 1] };
+		}
+	}
+	;
+}
+
 void Map::IterateCellularAutomata()
 {
 	// A copy is made so that the data that is tested for neigbors stays the same for all cells
@@ -112,6 +166,8 @@ void Map::IterateCellularAutomata()
 	}
 
 	m_Data = mapCopy;
+
+	GenerateTiles();
 }
 
 int Map::GetNeigbourCount(const int row, const int column)
