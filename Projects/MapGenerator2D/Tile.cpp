@@ -5,56 +5,41 @@
 #include <iostream>
 #include "utils.h"
 
-Tile::Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlNode* pTopLeftNode, ControlNode* pTopRightNode)
-	:m_pBottomLeftNode{ pBottomLeftNode }
-	, m_pBottomRightNode{ pBottomRightNode }
-	, m_pTopLeftNode{ pTopLeftNode }
-	, m_pTopRightNode{ pTopRightNode }
-	, m_pCentreLeftNode{ pBottomLeftNode->GetAboveNode() }
-	, m_pCentreRightNode{ pBottomRightNode->GetAboveNode() }
-	, m_pCentreTopNode{ pTopLeftNode->GetRightNode() }
-	, m_pCentreBottomNode{ pBottomLeftNode->GetRightNode() }
+Tile::Tile(std::shared_ptr<ControlNode> spBottomLeftNode, std::shared_ptr<ControlNode> spBottomRightNode, std::shared_ptr<ControlNode> spTopLeftNode, std::shared_ptr<ControlNode> spTopRightNode)
+	:m_spBottomLeftNode{ spBottomLeftNode }
+	, m_spBottomRightNode{ spBottomRightNode }
+	, m_spTopLeftNode{ spTopLeftNode }
+	, m_spTopRightNode{ spTopRightNode }
+	, m_pCentreLeftNode{ spBottomLeftNode->GetAboveNode() }
+	, m_pCentreRightNode{ spBottomRightNode->GetAboveNode() }
+	, m_pCentreTopNode{ spTopLeftNode->GetRightNode() }
+	, m_pCentreBottomNode{ spBottomLeftNode->GetRightNode() }
 {
 
 }
 
 Tile::~Tile()
 {
-	std::cout << "delete m_pBottomLeftNode: ";
-	if (m_pBottomLeftNode != nullptr)
-		delete m_pBottomLeftNode;
-	m_pBottomLeftNode = nullptr;
-
-	std::cout << "delete m_pBottomRightNode: ";
-	if (m_pBottomRightNode != nullptr)
-		delete m_pBottomRightNode;
-	m_pBottomRightNode = nullptr;
-
-	std::cout << "delete m_pTopLeftNode: ";
-	if (m_pTopLeftNode != nullptr)
-		delete m_pTopLeftNode;
-	m_pTopLeftNode = nullptr;
-
-	std::cout << "delete m_pTopRightNode: ";
-	if (m_pTopRightNode != nullptr)
-		delete m_pTopRightNode;
-	m_pTopRightNode = nullptr;
+	
 }
 
 void Tile::DrawNodes(float controlNodeRadius, float otherNodeRadius) const
 {
 	// Draw the control nodes
-	utils::SetColor(m_pBottomLeftNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
-	m_pBottomLeftNode->Draw(controlNodeRadius);
-	utils::SetColor(m_pBottomRightNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
-	m_pBottomRightNode->Draw(controlNodeRadius);
-	utils::SetColor(m_pTopLeftNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
-	m_pTopLeftNode->Draw(controlNodeRadius);
-	utils::SetColor(m_pTopRightNode->GetIsActive() ? Color4f{ 0,0,0,1 } : Color4f{ 1,1,1,1 });
-	m_pTopRightNode->Draw(controlNodeRadius);
+	utils::SetColor(m_spBottomLeftNode->GetIsActive() ? m_WallColor : m_FloorColor);
+	m_spBottomLeftNode->Draw(controlNodeRadius);
+
+	utils::SetColor(m_spBottomRightNode->GetIsActive() ? m_WallColor : m_FloorColor);
+	m_spBottomRightNode->Draw(controlNodeRadius);
+
+	utils::SetColor(m_spTopLeftNode->GetIsActive() ? m_WallColor : m_FloorColor);
+	m_spTopLeftNode->Draw(controlNodeRadius);
+
+	utils::SetColor(m_spTopRightNode->GetIsActive() ? m_WallColor : m_FloorColor);
+	m_spTopRightNode->Draw(controlNodeRadius);
 
 	// Draw the other nodes
-	utils::SetColor(Node::s_Color);
+	utils::SetColor(m_NodeColor);
 	m_pCentreLeftNode->Draw(otherNodeRadius);
 	m_pCentreRightNode->Draw(otherNodeRadius);
 	m_pCentreTopNode->Draw(otherNodeRadius);

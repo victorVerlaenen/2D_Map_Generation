@@ -7,8 +7,8 @@
 
 MapGenerator2D::MapGenerator2D(const Window& window)
 	:BaseGame{ window }
-	, m_pMap{ new Map{ 80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height} }
-	, m_pMapDrawer{ new MapDrawer{m_pMap, window.width, window.height} }
+	, m_upMap{ std::make_unique<Map>(80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height) }
+	, m_upMapDrawer{ std::make_unique<MapDrawer>(m_upMap.get(), window.width, window.height) }
 {
 	Initialize();
 }
@@ -25,11 +25,7 @@ void MapGenerator2D::Initialize()
 
 void MapGenerator2D::Cleanup()
 {
-	delete m_pMap;
-	m_pMap = nullptr;
 
-	delete m_pMapDrawer;
-	m_pMapDrawer = nullptr;
 }
 
 void MapGenerator2D::Update(float elapsedSec)
@@ -49,7 +45,7 @@ void MapGenerator2D::Update(float elapsedSec)
 void MapGenerator2D::Draw() const
 {
 	ClearBackground();
-	m_pMapDrawer->Draw();
+	m_upMapDrawer->Draw();
 }
 
 void MapGenerator2D::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
@@ -98,11 +94,11 @@ void MapGenerator2D::ProcessMouseDownEvent(const SDL_MouseButtonEvent& e)
 
 	if (e.button == SDL_BUTTON_LEFT)
 	{
-		m_pMap->IterateCellularAutomata();
+		m_upMap->IterateCellularAutomata();
 	}
 	if (e.button == SDL_BUTTON_RIGHT)
 	{
-		m_pMap->GenerateMap();
+		m_upMap->GenerateMap();
 	}
 }
 

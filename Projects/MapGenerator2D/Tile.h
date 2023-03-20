@@ -1,24 +1,34 @@
 #pragma once
+#include <memory>
 
 class ControlNode;
 class Node;
-class Tile
+class Tile final
 {
 public:
-	Tile(ControlNode* pBottomLeftNode, ControlNode* pBottomRightNode, ControlNode* pTopLeftNode, ControlNode* pTopRightNode);
+	explicit Tile(std::shared_ptr<ControlNode> spBottomLeftNode, std::shared_ptr<ControlNode> spBottomRightNode, std::shared_ptr<ControlNode> spTopLeftNode, std::shared_ptr<ControlNode> spTopRightNode);
 	~Tile();
+
+	Tile(const Tile&) = delete;
+	Tile& operator=(const Tile&) = delete;
+	Tile(Tile&&) = delete;
+	Tile& operator=(Tile&&) = delete;
 
 	void DrawNodes(float controlNodeRadius, float otherNodeRadius) const;
 	void Draw() const;
 
 private:
-	ControlNode* m_pBottomLeftNode;
-	ControlNode* m_pBottomRightNode;
-	ControlNode* m_pTopLeftNode;
-	ControlNode* m_pTopRightNode;
+	std::shared_ptr<ControlNode> m_spBottomLeftNode;
+	std::shared_ptr<ControlNode> m_spBottomRightNode;
+	std::shared_ptr<ControlNode> m_spTopLeftNode;
+	std::shared_ptr<ControlNode> m_spTopRightNode;
 
-	Node* m_pCentreLeftNode;
-	Node* m_pCentreRightNode;
-	Node* m_pCentreTopNode;
-	Node* m_pCentreBottomNode;
+	const Node* m_pCentreLeftNode;
+	const Node* m_pCentreRightNode;
+	const Node* m_pCentreTopNode;
+	const Node* m_pCentreBottomNode;
+
+	const Color4f m_WallColor{ 0.f, 0.f, 0.f, 1.f };
+	const Color4f m_FloorColor{ 1.f, 1.f, 1.f, 1.f };
+	const Color4f m_NodeColor{ 0.5f, 0.5f, 0.5f, 1.f };
 };

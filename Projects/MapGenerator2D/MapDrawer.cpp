@@ -4,15 +4,12 @@
 #include "Tile.h"
 #include "utils.h"
 
-MapDrawer::MapDrawer(Map* pMap, const float windowWidth, const float windowHeight)
+MapDrawer::MapDrawer(const Map* pMap, const float windowWidth, const float windowHeight)
 	:m_DrawMethod{ DrawMethod::nodesMap }
 	, m_pMap{ pMap }
 	, m_CellSize{ windowWidth >= windowHeight ? windowHeight / pMap->GetRows() : windowWidth / pMap->GetColumns()}
-	, m_WallColor{ 0, 0, 0, 1 }
-	, m_EmptyColor{ 1, 1, 1, 1 }
-	//, m_MapHeight{ m_CellSize * rows }
-	//, m_MapWidth{ m_CellSize * cols }
-	//, m_DrawingStartPoint{ (windowWidth / 2.f) - (m_MapWidth / 2.f), ((windowHeight / 2.f) + (m_MapHeight / 2.f)) - m_CellSize }
+	, m_WallColor{ 0.f, 0.f, 0.f, 1.f }
+	, m_FloorColor{ 1.f, 1.f, 1.f, 1.f }
 {
 	m_MapHeight = { m_CellSize * pMap->GetRows() };
 	m_MapWidth = { m_CellSize * pMap->GetColumns() };
@@ -66,7 +63,7 @@ void MapDrawer::DrawPixelMap() const
 		for (int col{ 0 }; col < cols; ++col)
 		{
 			// Set right color according to this cell
-			utils::SetColor((data[row][col] == true) ? m_WallColor : m_EmptyColor);
+			utils::SetColor((data[row][col] == true) ? m_WallColor : m_FloorColor);
 
 			// Determine the size op the map so it fits the window
 			utils::FillRect(drawingPoint, m_CellSize, m_CellSize);
@@ -93,13 +90,14 @@ void MapDrawer::DrawNodesMap() const
 	}
 
 	float controlNodeRadius{ 3 }, nodeRadius{ 2 };
+	const unsigned int rows{m_pMap->GetRows() - 1}, cols{ m_pMap->GetColumns() - 1};// Because the nodes are in the middle of the cell, there will be 1 less tile
 
-	auto pTiles = m_pMap->GetTiles();
-	for (auto row : pTiles)
+	// For every Tile in the map, draw all the nodes
+	for (int row{0}; row < rows; ++row)
 	{
-		for (Tile* pTile : row)
+		for (int col{0}; col < cols; ++col)
 		{
-			pTile->DrawNodes(controlNodeRadius, nodeRadius);
+			m_pMap->GetTile(row, col)->DrawNodes(controlNodeRadius, nodeRadius);
 		}
 	}
 }

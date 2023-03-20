@@ -1,12 +1,13 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory>
 
 class Tile;
 class Map final
 {
 public:
-	Map(const unsigned int rows, const unsigned int cols, const float windowWidth, const float windowHeight);
+	explicit Map(const unsigned int rows, const unsigned int cols, const float windowWidth, const float windowHeight);
 	~Map();
 
 	Map(const Map&) = delete;
@@ -20,13 +21,13 @@ public:
 	const std::vector<std::vector<bool>>& GetData() const;
 	unsigned int GetRows() const;
 	unsigned int GetColumns() const;
-	std::vector<std::vector<Tile*>> GetTiles() const;
+	const Tile* Map::GetTile(int row, int column) const;
 
 	// Debug
 	void PrintMap() const;
 private:
 	std::vector<std::vector<bool>> m_Data;
-	std::vector<std::vector<Tile*>> m_pTiles;
+	std::vector<std::vector<std::unique_ptr<Tile>>> m_upTiles;
 	const unsigned int m_Rows;
 	const unsigned int m_Columns;
 	const float m_CellSize;

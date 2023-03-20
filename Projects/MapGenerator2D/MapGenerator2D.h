@@ -1,17 +1,19 @@
 #pragma once
 #include "BaseGame.h"
+#include <memory>
 
 class Map;
 class MapDrawer;
-class MapGenerator2D : public BaseGame
+class MapGenerator2D final : public BaseGame
 {
 public:
 	explicit MapGenerator2D( const Window& window );
+	~MapGenerator2D();
+
 	MapGenerator2D(const MapGenerator2D& other) = delete;
 	MapGenerator2D& operator=(const MapGenerator2D& other) = delete;
 	MapGenerator2D( MapGenerator2D&& other) = delete;
 	MapGenerator2D& operator=(MapGenerator2D&& other) = delete;
-	~MapGenerator2D();
 
 	void Update( float elapsedSec ) override;
 	void Draw( ) const override;
@@ -30,6 +32,6 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
-	Map* m_pMap;
-	MapDrawer* m_pMapDrawer;
+	std::unique_ptr<Map> m_upMap;
+	std::unique_ptr<MapDrawer> m_upMapDrawer;
 };

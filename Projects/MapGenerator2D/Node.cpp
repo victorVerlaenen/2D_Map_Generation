@@ -2,8 +2,6 @@
 #include "Node.h"
 #include "utils.h"
 
-Color4f Node::s_Color{ Color4f{0, 1, 0, 1} };
-
 Node::Node(const Point2f& position)
 	:m_Position{ position }
 	, m_VertexIndex{ -1 }
