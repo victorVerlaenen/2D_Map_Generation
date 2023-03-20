@@ -28,8 +28,6 @@ public:
 private:
 
 	// FUNCTIONS
-	void Initialize( );
-	void Cleanup( );
 	void ClearBackground( ) const;
 
 	std::unique_ptr<Map> m_upMap;

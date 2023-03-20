@@ -11,11 +11,6 @@ ControlNode::ControlNode(const Point2f& position, bool isActive, float cellSize)
 
 }
 
-ControlNode::~ControlNode()
-{
-
-}
-
 const Node* ControlNode::GetAboveNode() const
 {
 	return m_upAboveNode.get();

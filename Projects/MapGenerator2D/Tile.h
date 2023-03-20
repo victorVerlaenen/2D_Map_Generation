@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 
 class ControlNode;
 class Node;
@@ -15,9 +16,12 @@ public:
 	Tile& operator=(Tile&&) = delete;
 
 	void DrawNodes(float controlNodeRadius, float otherNodeRadius) const;
+	const unsigned int GetConfiguration() const;
 	void Draw() const;
 
 private:
+	void Initialize();
+
 	std::shared_ptr<ControlNode> m_spBottomLeftNode;
 	std::shared_ptr<ControlNode> m_spBottomRightNode;
 	std::shared_ptr<ControlNode> m_spTopLeftNode;
@@ -31,4 +35,7 @@ private:
 	const Color4f m_WallColor{ 0.f, 0.f, 0.f, 1.f };
 	const Color4f m_FloorColor{ 1.f, 1.f, 1.f, 1.f };
 	const Color4f m_NodeColor{ 0.5f, 0.5f, 0.5f, 1.f };
+
+	unsigned int m_Configuration;
+	std::vector<Point2f> m_PolygonPoints;
 };

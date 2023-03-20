@@ -5,7 +5,7 @@ class Node
 {
 public:
 	explicit Node(const Point2f& position);
-	virtual ~Node();
+	virtual ~Node() = default;
 
 	Node(const Node&) = delete;
 	Node& operator=(const Node&) = delete;
@@ -14,6 +14,7 @@ public:
 
 	virtual void Draw(float radius) const;
 
+	const Point2f& GetPosition() const;
 private:
 	const Point2f m_Position;
 	const int m_VertexIndex;

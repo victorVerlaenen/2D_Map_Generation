@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <stack>
 
 class Tile;
 class Map final
@@ -15,7 +16,10 @@ public:
 	Map(Map&&) = delete;
 	Map& operator=(Map&&) = delete;
 
+	// Let the cellular automate happen once
 	void IterateCellularAutomata();
+	// Goes back to the previous state
+	void RetrogradeCellularAutomata();
 
 	void GenerateMap();
 	const std::vector<std::vector<bool>>& GetData() const;
@@ -27,6 +31,7 @@ public:
 	void PrintMap() const;
 private:
 	std::vector<std::vector<bool>> m_Data;
+	std::stack<std::vector<std::vector<bool>>> m_PreviousDataSets;
 	std::vector<std::vector<std::unique_ptr<Tile>>> m_upTiles;
 	const unsigned int m_Rows;
 	const unsigned int m_Columns;
@@ -39,7 +44,6 @@ private:
 
 	const unsigned int m_CellularAutomataIterations{ 5 };
 
-	void Initialize();
 	void GenerateNoiseMap();
 	void GenerateTiles();
 	int GetNeigbourCount(const int row, const int column);

@@ -13,12 +13,13 @@ Map::Map(const unsigned int rows, const unsigned int cols, const float windowWid
 	, m_NoiseDensityPercentage{ 48 }
 	, m_Rows{ rows }
 	, m_Columns{ cols }
+	, m_PreviousDataSets{}
 {
 	float mapWidth = m_CellSize * m_Columns;
 	float mapHeight = m_CellSize * m_Rows;
 	m_FirstNodePosition = Point2f{ (windowWidth / 2.f) - (mapWidth / 2.f), ((windowHeight / 2.f) + (mapHeight / 2.f)) };
 
-	Initialize();
+	GenerateMap();
 }
 
 Map::~Map()
@@ -26,14 +27,12 @@ Map::~Map()
 
 }
 
-void Map::Initialize()
-{
-	GenerateMap();
-}
-
 void Map::GenerateMap()
 {
+	// clear the data and the previous data sets
+	m_PreviousDataSets = std::stack<std::vector<std::vector<bool>>>{};
 	m_Data.assign(m_Rows, std::vector<bool>(m_Columns, true));
+
 	GenerateNoiseMap();
 	GenerateTiles();
 
@@ -140,6 +139,9 @@ void Map::GenerateTiles()
 
 void Map::IterateCellularAutomata()
 {
+	// Save the current Map
+	m_PreviousDataSets.push(m_Data);
+
 	// A copy is made so that the data that is tested for neigbors stays the same for all cells
 	auto mapCopy = m_Data;
 
@@ -163,6 +165,19 @@ void Map::IterateCellularAutomata()
 		}
 	}
 	m_Data = mapCopy;
+
+	// Regenerate the tiles based on the map
+	GenerateTiles();
+}
+
+void Map::RetrogradeCellularAutomata()
+{
+	if (m_PreviousDataSets.empty() == true)
+	{
+		return;
+	}
+	m_Data = m_PreviousDataSets.top();
+	m_PreviousDataSets.pop();
 
 	// Regenerate the tiles based on the map
 	GenerateTiles();

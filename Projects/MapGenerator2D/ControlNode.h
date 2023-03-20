@@ -6,7 +6,7 @@ class ControlNode final : public Node
 {
 public:
 	explicit ControlNode(const Point2f& position, bool isActive, float cellSize);
-	virtual ~ControlNode();
+	virtual ~ControlNode() = default;
 
 	ControlNode(const ControlNode&) = delete;
 	ControlNode& operator=(const ControlNode&) = delete;

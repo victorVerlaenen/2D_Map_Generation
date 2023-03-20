@@ -9,12 +9,12 @@ Node::Node(const Point2f& position)
 
 }
 
-Node::~Node()
-{
-	//
-}
-
 void Node::Draw(float radius) const
 {
 	utils::FillEllipse(m_Position.x, m_Position.y, radius, radius);
+}
+
+const Point2f& Node::GetPosition() const
+{
+	return m_Position;
 }

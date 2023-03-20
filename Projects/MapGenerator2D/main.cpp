@@ -10,7 +10,7 @@ int main( int argc, char *argv[] )
 
 	StartHeapControl();
 
-	MapGenerator2D* pGame{ new MapGenerator2D{ Window{ "MapGenerator2D - Verlaenen, Victor", 846.f * 2.f, 500.f * 2.f} } };
+	MapGenerator2D* pGame{ new MapGenerator2D{ Window{ "MapGenerator2D - Verlaenen, Victor", 846.f * 1.5f, 500.f * 1.5f} } };
 	pGame->Run();
 	delete pGame;
 

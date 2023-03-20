@@ -10,20 +10,10 @@ MapGenerator2D::MapGenerator2D(const Window& window)
 	, m_upMap{ std::make_unique<Map>(80, static_cast<unsigned int>((80 / window.height) * window.width), window.width, window.height) }
 	, m_upMapDrawer{ std::make_unique<MapDrawer>(m_upMap.get(), window.width, window.height) }
 {
-	Initialize();
+
 }
 
 MapGenerator2D::~MapGenerator2D()
-{
-	Cleanup();
-}
-
-void MapGenerator2D::Initialize()
-{
-
-}
-
-void MapGenerator2D::Cleanup()
 {
 
 }
@@ -56,19 +46,30 @@ void MapGenerator2D::ProcessKeyDownEvent(const SDL_KeyboardEvent& e)
 void MapGenerator2D::ProcessKeyUpEvent(const SDL_KeyboardEvent& e)
 {
 	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch ( e.keysym.sym )
+	{
+	case SDLK_SPACE:
+		m_upMap->GenerateMap();
+		break;
+	case SDLK_UP:
+		m_upMap->IterateCellularAutomata();
+		break;
+	case SDLK_DOWN:
+		m_upMap->RetrogradeCellularAutomata();
+		break;
+	case SDLK_1:
+	case SDLK_KP_1:
+		m_upMapDrawer->ChangeDrawMethod(MapDrawer::DrawMethod::pixelMap);
+		break;
+	case SDLK_2:
+	case SDLK_KP_2:
+		m_upMapDrawer->ChangeDrawMethod(MapDrawer::DrawMethod::nodesMap);
+		break;
+	case SDLK_3:
+	case SDLK_KP_3:
+		m_upMapDrawer->ChangeDrawMethod(MapDrawer::DrawMethod::smoothMap);
+		break;
+	}
 }
 
 void MapGenerator2D::ProcessMouseMotionEvent(const SDL_MouseMotionEvent& e)
@@ -91,15 +92,6 @@ void MapGenerator2D::ProcessMouseDownEvent(const SDL_MouseButtonEvent& e)
 	//	std::cout << " middle button " << std::endl;
 	//	break;
 	//}
-
-	if (e.button == SDL_BUTTON_LEFT)
-	{
-		m_upMap->IterateCellularAutomata();
-	}
-	if (e.button == SDL_BUTTON_RIGHT)
-	{
-		m_upMap->GenerateMap();
-	}
 }
 
 void MapGenerator2D::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e)

@@ -2,10 +2,11 @@
 #include "MapDrawer.h"
 #include "Map.h"
 #include "Tile.h"
+#include "ControlNode.h"
 #include "utils.h"
 
 MapDrawer::MapDrawer(const Map* pMap, const float windowWidth, const float windowHeight)
-	:m_DrawMethod{ DrawMethod::nodesMap }
+	:m_DrawMethod{ DrawMethod::pixelMap }
 	, m_pMap{ pMap }
 	, m_CellSize{ windowWidth >= windowHeight ? windowHeight / pMap->GetRows() : windowWidth / pMap->GetColumns()}
 	, m_WallColor{ 0.f, 0.f, 0.f, 1.f }
@@ -32,13 +33,14 @@ void MapDrawer::Draw() const
 		DrawNodesMap();
 		break;
 	case DrawMethod::smoothMap:
+		DrawSmoothMap();
 		break;
 	}
 }
 
 void MapDrawer::ChangeDrawMethod(const DrawMethod drawMethod)
 {
-
+	m_DrawMethod = drawMethod;
 }
 
 void MapDrawer::DrawPixelMap() const
@@ -89,8 +91,9 @@ void MapDrawer::DrawNodesMap() const
 		return;
 	}
 
-	float controlNodeRadius{ 3 }, nodeRadius{ 2 };
-	const unsigned int rows{m_pMap->GetRows() - 1}, cols{ m_pMap->GetColumns() - 1};// Because the nodes are in the middle of the cell, there will be 1 less tile
+	float controlNodeRadius{ m_CellSize / 4.f }, nodeRadius{ m_CellSize / 6.f };
+	// Because the nodes are in the middle of the cell, there will be 1 less tile
+	const unsigned int rows{m_pMap->GetRows() - 1}, cols{ m_pMap->GetColumns() - 1};
 
 	// For every Tile in the map, draw all the nodes
 	for (int row{0}; row < rows; ++row)
@@ -104,5 +107,15 @@ void MapDrawer::DrawNodesMap() const
 
 void MapDrawer::DrawSmoothMap() const
 {
+	// Because the nodes are in the middle of the cell, there will be 1 less tile
+	const unsigned int rows{ m_pMap->GetRows() - 1 }, cols{ m_pMap->GetColumns() - 1 };
 
+	// For every Tile in the map, check the configuration and draw the right polygon
+	for (int row{ 0 }; row < rows; ++row)
+	{
+		for (int col{ 0 }; col < cols; ++col)
+		{
+			m_pMap->GetTile(row, col)->Draw();
+		}
+	}
 }
