@@ -40,6 +40,7 @@ void Tile::Initialize()
 		m_Configuration += 1;
 	}
 
+	// Check the read me for more info about this
 	switch (m_Configuration)
 	{
 		// 1 active node
